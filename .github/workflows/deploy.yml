@@ -1,4 +1,4 @@
-name: Deploy Zola site to GitHub Pages
+name: Zola on GitHub Pages
 
 on:
   push:
@@ -7,17 +7,12 @@ on:
 
 jobs:
   build:
+    name: Publish site
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v2
-      - name: Install Zola
-        run: |
-          curl -s https://getzola.org/install.sh | bash
-      - name: Build site
-        run: zola build
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
+      - name: Checkout main
+        uses: actions/checkout@v4
+      - name: Build and deploy
+        uses: shalzz/zola-deploy-action@v0.19.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
